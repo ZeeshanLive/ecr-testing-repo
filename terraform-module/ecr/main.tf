@@ -6,14 +6,13 @@ resource "aws_ecr_repository" "this" {
   force_delete         = lookup(each.value, "force_delete", false)
 
   encryption_configuration {
-    encryption_type = "AES256"
+    encryption_type = lookup(each.value, "encryption_type", "AES256")
+    kms_key         = lookup(each.value, "kms_key", null)
   }
 
   image_scanning_configuration {
-    scan_on_push = false
+    scan_on_push = lookup(each.value, "scan_on_push", false)
   }
-  tags = merge(
-    var.default_tags,
-    lookup(each.value, "tags", {})
-  )
+
+  tags = merge(var.default_tags, lookup(each.value, "tags", {}))
 }
