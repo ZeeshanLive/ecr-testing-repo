@@ -6,7 +6,7 @@ resource "aws_ecr_repository" "this" {
   force_delete         = lookup(each.value, "force_delete", false)
 
   encryption_configuration {
-    encryption_type = "KMS"
+    encryption_type = "AES256"
   }
 
   tags = merge(
