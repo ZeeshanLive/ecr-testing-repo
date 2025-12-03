@@ -9,6 +9,9 @@ resource "aws_ecr_repository" "this" {
     encryption_type = "AES256"
   }
 
+  image_scanning_configuration {
+    scan_on_push = false
+  }
   tags = merge(
     var.default_tags,
     lookup(each.value, "tags", {})
