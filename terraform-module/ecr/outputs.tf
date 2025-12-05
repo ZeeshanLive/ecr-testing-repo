@@ -1,4 +1,3 @@
 output "urls" {
-  description = "Repository URLs mapped by key"
-  value       = { for k, v in aws_ecr_repository.this : k => v.repository_url }
+  value = { for k, r in aws_ecr_repository.this : k => r.repository_url }
 }
