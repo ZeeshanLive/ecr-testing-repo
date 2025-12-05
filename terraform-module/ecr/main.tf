@@ -1,18 +1,15 @@
-resource "aws_ecr_repository" "this" {
+resource "aws_ecr_repository" "repos" {
   for_each = var.repositories
+  name     = each.key
+}
 
-  name                 = each.value.name
-  image_tag_mutability = lookup(each.value, "image_tag_mutability", "MUTABLE")
-  force_delete         = lookup(each.value, "force_delete", false)
-
-  encryption_configuration {
-    encryption_type = lookup(each.value, "encryption_type", "AES256")
-    kms_key         = lookup(each.value, "kms_key", null)
+resource "aws_ecr_lifecycle_policy" "lifecycle" {
+  for_each = {
+    for name, cfg in var.repositories :
+    name => cfg
+    if lookup(cfg, "lifecycle_policy", null) != null
   }
 
-  image_scanning_configuration {
-    scan_on_push = lookup(each.value, "scan_on_push", false)
-  }
-
-  tags = merge(var.default_tags, lookup(each.value, "tags", {}))
+  repository = each.key
+  policy     = each.value.lifecycle_policy
 }
