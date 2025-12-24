@@ -1,12 +1,18 @@
-variable "repositories" {
-  description = "Map of ECR repositories to manage"
-  type = map(object({
-    name               = string
-    encryption_type    = string
-    kms_key            = optional(string)
-    scan_on_push       = bool
-    image_tag_mutability = string
-    tags               = map(string)
-    lifecycle_policy   = optional(string)
-  }))
+variable "name" {
+  type = string
+}
+
+variable "image_tag_mutability" {
+  type    = string
+  default = "MUTABLE"
+}
+
+variable "scan_on_push" {
+  type    = bool
+  default = true
+}
+
+variable "lifecycle_policy" {
+  type    = string
+  default = null
 }
